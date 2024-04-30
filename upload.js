@@ -1,32 +1,16 @@
-const multer = require("multer");
-const s3 = require('./awsconfig');
+const express = require('express');
+const router = express.Router();
+const upload = require('./multer');
 
-// Multer file upload middleware with size and type validation
-const upload = multer({
-	storage: storage,
-	limits: { fileSize: 10 * 1024 * 1024 }, // 10MB file size limit
-	fileFilter: function (req, file, cb) {
-	  // Allowed file types
-	  const allowedTypes = /jpeg|jpg|png|gif/;
-	  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-	  const mimetype = allowedTypes.test(file.mimetype);
-	  if (extname && mimetype) {
-		return cb(null, true);
-	  } else {
-		cb(new Error('Only images are allowed'));
-	  }
-	}
-  });
+router.post('/', upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded' });
+  }
+
+  const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+  console.log('File saved locally');
   
+  res.json({message: 'File uploaded successfully', imageUrl: imageUrl, filename: req.file.filename });
+});
 
-// Multer storage configuration
-const storage = multer.diskStorage({
-	destination: function (req, file, cb) {
-	  cb(null, 'uploads/');
-	},
-	filename: function (req, file, cb) {
-	  cb(null, Date.now() + path.extname(file.originalname));
-	}
-  });
-
-module.exports = upload;
+module.exports = router;
