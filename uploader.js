@@ -16,7 +16,7 @@ const uploadFileToS3 = (fileData,originalFilename,fileSize) => {
       console.error('Error uploading file to S3:', err);
     } else {
       console.log('File uploaded successfully:', data.Location);
-      // Save the link to the uploaded file in your database
+      
       const newFile = new Images({
         fileName: originalFilename,
         fileSize:  fileSize, 

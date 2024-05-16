@@ -10,12 +10,12 @@ router.post('/', upload.single('file'), async (req, res) => {
 
   const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
   console.log('File saved locally');
-  console.log("test here",req.file)
+  console.log("test here",req.file);
 
   try {
     const response = uploadFileToS3(req.file.buffer,req.file.originalname,req.file.size)
     console.log('File uploaded to S3:', response)
-    res.json({ message: 'File uploaded to S3 successfully', response });
+    res.json({ message: 'File uploaded to S3 successfully', response:response });
   } catch (error) {
     console.error('Error uploading file to S3:', error);
   }
