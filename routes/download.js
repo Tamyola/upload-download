@@ -1,20 +1,33 @@
 const express = require('express');
-const router = express.Router();
 const path = require('path');
 const fs = require('fs');
+const router = express.Router();
+const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
-router.get('/:fileName', (req, res) => {
+
+const s3 = new S3Client({ region: process.env.AWS_REGION });
+
+router.get('/:fileName', async (req, res) => {
+
   const fileName = req.params.fileName;
-  const filePath = path.join(__dirname, 'uploads', fileName);
+  
+  const params = {
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    Key: fileName,
+  };
 
-  fs.access(filePath, fs.constants.F_OK, (err) => {
-    if (err) {
-      return res.status(404).json({ error: 'File not found' });
-    }
+  try {
+    const command = new GetObjectCommand(params);
+    const signedUrl = await getSignedUrl(s3, command, { expiresIn: 30 }); 
+  
     
-    const fileStream = fs.createReadStream(filePath);
-    fileStream.pipe(res);
-  });
+    res.redirect(signedUrl);
+  } catch (err) {
+    console.error('Error generating pre-signed URL:', err);
+    res.status(500).json({ error: 'Failed to generate pre-signed URL' });
+  }
 });
 
 module.exports = router;
+

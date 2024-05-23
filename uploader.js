@@ -3,7 +3,7 @@ const Images = require('./models/store');
 
 const s3 = new AWS.S3();
 
-const uploadFileToS3 = (fileData,originalFilename,fileSize) => {
+const uploadFileToS3 = (fileData,originalFilename,fileSize,fileType) => {
   const params = {
     Bucket: process.env.AWS_S3_BUCKET_NAME,
     Key: originalFilename,
@@ -15,12 +15,12 @@ const uploadFileToS3 = (fileData,originalFilename,fileSize) => {
     if (err) {
       console.error('Error uploading file to S3:', err);
     } else {
-      console.log('File uploaded successfully:', data.Location);
+      console.log('File uploaded:', data.Location);
       
       const newFile = new Images({
         fileName: originalFilename,
         fileSize:  fileSize, 
-        fileType: 'image/jpeg/png/gif',
+        fileType:  fileType,
         s3Link: data.Location,
       });
 
