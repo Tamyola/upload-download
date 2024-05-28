@@ -24,8 +24,8 @@ router.get('/:fileName', async (req, res) => {
     
     res.redirect(signedUrl);
   } catch (err) {
-    console.error('Error generating pre-signed URL:', err);
-    res.status(500).json({ error: 'Failed to generate pre-signed URL' });
+    console.error('Error generating signed URL:', err);
+    res.status(500).json({ error: 'Failed to generate signed URL' });
   }
 });
 
