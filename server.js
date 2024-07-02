@@ -2,12 +2,17 @@ require('dotenv').config()
 const express = require('express');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const setupSwagger = require("./swagger")
+
 const app = express();
+
+setupSwagger(app);
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1:27017/upldwn');
 
 app.use('/upload', require('./routes/upload'));
 app.use('/download', require('./routes/download'));
+
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -27,7 +32,7 @@ const swaggerOptions = {
 };
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use('/ayo-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

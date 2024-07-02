@@ -1,5 +1,25 @@
 const express = require('express');
 const router = express.Router();
+
+/**
+ * @swagger
+ * /upload:
+ *   post:
+ *     summary: Upload a file.
+ *     consumes:
+ *       - multipart/form-data
+ *     parameters:
+ *       - in: formData
+ *         name: file
+ *         schema:
+ *           type: file
+ *           format: binary
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: File uploaded successfully.
+ */
+
 const upload = require('../multer');
 const uploadFileToS3 = require('../uploader');
 

@@ -1,5 +1,26 @@
 const express = require('express');
 const path = require('path');
+
+/**
+ * @swagger
+ * /upload:
+ *   post:
+ *     summary: Upload a file.
+ *     consumes:
+ *       - multipart/form-data
+ *     parameters:
+ *       - in: formData
+ *         name: file
+ *         schema:
+ *           type: file
+ *           format: binary
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: File uploaded successfully.
+ */
+
+
 const fs = require('fs');
 const router = express.Router();
 const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');

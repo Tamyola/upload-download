@@ -3,27 +3,6 @@ const router = express.Router();
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       required:
- *         - id
- *         - name
- *       properties:
- *         id:
- *           type: integer
- *           description: The auto-generated id of the user
- *         name:
- *           type: string
- *           description: The name of the user
- *       example:
- *         id: 1
- *         name: John Doe
- */
-
-/**
- * @swagger
  * /users:
  *   get:
  *     summary: Returns the list of all users
@@ -38,15 +17,13 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-router.get('/', (req, res) => {
-  res.send([{ id: 1, name: 'John Doe' }]);
-});
+
 
 /**
  * @swagger
  * /users/{id}:
- *   get:
- *     summary: Get a user by ID
+ *   post:
+ *     summary: create a user by id
  *     tags: [Users]
  *     parameters:
  *       - in: path
@@ -65,10 +42,6 @@ router.get('/', (req, res) => {
  *       404:
  *         description: User not found
  */
-router.get('/:id', (req, res) => {
-  const userId = parseInt(req.params.id, 10);
-  // Fetch user by ID logic
-  res.send({ id: userId, name: 'John Doe' });
-});
+
 
 module.exports = router;
